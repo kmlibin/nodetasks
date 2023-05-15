@@ -1,15 +1,17 @@
 const mongoose = require("mongoose");
 
 //1st arg, connection string, 2nd arg is options...these options removed all the deprecation warnings
+
 const connectDB = (url) => {
-  if (url) {
-    mongoose.connect(url, {
+  return mongoose
+    .connect(url, {
       useNewUrlParser: true,
       useCreateIndex: true,
       useFindAndModify: false,
       useUnifiedTopology: true,
-    });
-  }
+    })
+    .then(() => console.log("Database connected!"))
+    .catch((err) => console.error("Database connection error:", err));
 };
 
 //refactor because right now, the app starts, then database starts. we want it the other way around, that way if
