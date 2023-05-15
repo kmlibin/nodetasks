@@ -1,3 +1,4 @@
+require('./db/connect');
 //set up server
 const express = require("express");
 const app = express();
@@ -10,7 +11,11 @@ app.use(express.json())
 
 //routes. 
 //think about the functionality of your page. editing? posting? deleting?
-///api/v1/tasks is a convention, signals that all of them are the api routes. v1 just allows you to update as you keep working
+///api/v1/tasks is a convention, signals that all of them are the api routes. v1 just allows you to update as you keep working. 
+//*be consistent with routes for your users!
+//important b/c we are creating a server, so we want to create an https interface. this allows frontend to interact with our data.
+//REST API representational state transfer. 
+//our users can complete CRUD operations
 
 app.get('/hello', (req, res) => {
     res.send('task manager app')
