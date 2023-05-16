@@ -4,13 +4,17 @@ const app = express();
 
 //connect to db and .env variable
 const connectDB = require("./db/connect");
-require('dotenv').config();
+require("dotenv").config();
+
+const notFound = require("./middleware/not-found");
 
 //import routes
 const tasks = require("./routes/tasks");
+
 //need to access json data sent from thefrontend. middleware! get access to req.body
 //middleware
 app.use(express.json());
+app.use(express.static("./public"));
 
 //routes.
 //think about the functionality of your page. editing? posting? deleting?
@@ -20,11 +24,9 @@ app.use(express.json());
 //REST API representational state transfer.
 //our users can complete CRUD operations
 
-app.get("/hello", (req, res) => {
-  res.send("task manager app");
-});
-
 app.use("/api/v1/tasks", tasks);
+
+app.use(notFound);
 
 const port = 3000;
 
