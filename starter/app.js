@@ -6,8 +6,6 @@ const app = express();
 const connectDB = require("./db/connect");
 require("dotenv").config();
 
-
-
 //import routes
 const tasks = require("./routes/tasks");
 
@@ -32,7 +30,7 @@ app.use("/api/v1/tasks", tasks);
 app.use(notFound);
 app.use(errorHandlerMiddleware);
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 //start up database, spins up server if connection is successful
 const start = async () => {
