@@ -1,6 +1,8 @@
 //import models
 const Task = require("../models/Task");
 
+const { createCustomError } = require("../errors/custom-error");
+
 //middleware
 const asyncWrapper = require("../middleware/async");
 
@@ -23,13 +25,13 @@ const createTask = asyncWrapper(async (req, res) => {
 
 //get one task
 //have to implement a specific response if the id doesn't match any id we have. why two errors? simply use you can have two types of errors
-const getSingleTask = asyncWrapper(async (req, res) => {
+const getSingleTask = asyncWrapper(async (req, res, next) => {
   const { id: taskId } = req.params;
   const task = await Task.findOne({ _id: taskId });
   if (!task) {
-    return res
-      .status(404)
-      .json({ msg: `cannot find task with id of ${taskId}` });
+    return next(
+      createCustomError(`cannot find task with id of ${taskId}`, 404)
+    );
   }
   res.status(200).json({ task });
 });
@@ -44,7 +46,9 @@ const updateTask = asyncWrapper(async (req, res) => {
     runValidators: true,
   });
   if (!task) {
-    return res.status(404).json({ msg: `no task with id: ${taskId}` });
+    return next(
+      createCustomError(`cannot find task with id of ${taskId}`, 404)
+    );
   }
   res.status(200).json({ task });
 });
@@ -54,7 +58,9 @@ const deleteTask = asyncWrapper(async (req, res) => {
   const { id: taskId } = req.params;
   const task = await Task.findOneAndDelete({ _id: taskId });
   if (!task) {
-    return res.status(404).json({ msg: `cannot find task id: ${taskId}` });
+    return next(
+      createCustomError(`cannot find task with id of ${taskId}`, 404)
+    );
   }
   res.status(200).json({ task });
 });
